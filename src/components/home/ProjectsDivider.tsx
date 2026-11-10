@@ -19,6 +19,12 @@ export default function ProjectsDivider() {
     const subtitle = subtitleRef.current;
     if (!section || !title || !subtitle) return;
 
+    // Movimento ridotto: titoli subito visibili, nessuna animazione.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set([title, subtitle], { opacity: 1, y: 0 });
+      return;
+    }
+
     const t1 = gsap.fromTo(title,
       { y: 40, opacity: 0 },
       { y: 0, opacity: 1, duration: 1.2, ease: "power3.out",
@@ -67,7 +73,8 @@ export default function ProjectsDivider() {
             opacity: 0,
           }}
         >
-          OGNI PROGETTO
+          {/* Spazio prima del <br>: vedi ProgettiamoDivider. */}
+          OGNI PROGETTO{" "}
           <br />
           NASCE DA UN&apos;IDEA
         </h2>
@@ -85,7 +92,7 @@ export default function ProjectsDivider() {
             opacity: 0,
           }}
         >
-          QUESTE SONO QUELLE CHE ABBIAMO TRASFORMATO
+          QUESTE SONO QUELLE CHE ABBIAMO TRASFORMATO{" "}
           <br />
           IN AMBIENTI IMMERSIVI, ESPERIENZE DIGITALI E VISIONI CONCRETE.
         </p>

@@ -4,17 +4,30 @@ import { client } from "@/sanity/lib/client";
 import { categoriesQuery, worksProjectsQuery } from "@/sanity/queries";
 import Navbar from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
+import SkipLinks from "@/components/layout/SkipLinks";
 import WorksGrid from "@/components/works/WorksGrid";
 import HeroAmbientLight from "@/components/home/HeroAmbientLight";
 import { contentContainer } from "@/lib/layout";
+import type { Metadata } from "next";
 
-export default async function WorksPage() {
+export const metadata: Metadata = {
+  title: "Progetti",
+  alternates: { canonical: "/projects" },
+};
+
+export default async function ProjectsIndexPage() {
   const [projects, categories] = await Promise.all([
     client.fetch(worksProjectsQuery),
     client.fetch(categoriesQuery),
   ]);
 
   return (
+    <>
+    <SkipLinks links={[
+      { id: "filtri", label: "Filtri" },
+      { id: "elenco-progetti", label: "Progetti" },
+      { id: "contatti", label: "Contatti" },
+    ]} />
     <main style={{ background: "#08001a", minHeight: "100vh", color: "#fff" }}>
       <HeroAmbientLight />
       <Navbar />
@@ -42,7 +55,9 @@ export default async function WorksPage() {
         </div>
       </section>
 
-      <Footer />
     </main>
+    {/* Fuori da <main>: e' il landmark "contentinfo". */}
+    <Footer />
+    </>
   );
 }

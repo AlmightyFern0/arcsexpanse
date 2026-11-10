@@ -28,7 +28,13 @@ export default function CosaVedere() {
   return (
     <section
       ref={sectionRef}
+      // Destinazione della voce di menu "Immersive Experience" (/#experience).
+      id="experience"
+      tabIndex={-1}
+      className="skip-target"
       style={{
+        // La barra in alto e' fissa: senza, coprirebbe il titolo all'arrivo.
+        scrollMarginTop: "5rem",
         position: "relative",
         zIndex: 1,
         display: "flex",
@@ -63,13 +69,16 @@ export default function CosaVedere() {
         </h2>
 
         <div>
-          <DiagonalButton href="/works">Voglio scoprirlo →</DiagonalButton>
+          <DiagonalButton href="/projects">Voglio scoprirlo →</DiagonalButton>
         </div>
 
         <a
           href={EXPANSE_URL}
           target="_blank"
           rel="noopener noreferrer"
+          // Il nome sta sul link, non sul canvas: il canvas si monta solo vicino
+          // al viewport, e prima il link restava senza nome accessibile.
+          aria-label="Entra nell'esperienza Expanse (si apre in una nuova scheda)"
           style={{
             display: "block",
             // Su mobile il portale esce dai margini del content container e
@@ -85,7 +94,6 @@ export default function CosaVedere() {
           {nearViewport && (
             <PortalCanvas
               imageUrl={PORTAL_IMAGE}
-              alt="Entra nell'esperienza Expanse"
               activateOnCenter={isMobile}
             />
           )}

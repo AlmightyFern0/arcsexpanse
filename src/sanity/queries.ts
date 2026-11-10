@@ -1,8 +1,6 @@
 import { groq } from "next-sanity";
 
-// Un progetto è pubblicato solo se è visibile *e* lo è la sua skill
-// (`project.category` è un reference a skill, nonostante il nome).
-const PROJECT_VISIBLE = `_type == "project" && visible == true && category->visible != false`;
+import { PROJECT_VISIBLE } from "./filters";
 
 // Le categorie nascoste spariscono dall'elenco del progetto, senza nascondere
 // il progetto stesso.
@@ -41,6 +39,16 @@ export const projectBySlugQuery = groq`
     "sceneLightColor": sceneLightColor.hex,
     listaImmaginiDettaglioProgetto,
   }
+`;
+
+// Esistenza di un progetto pubblicato, per i redirect degli slug rinominati.
+export const projectSlugExistsQuery = groq`
+  count(*[${PROJECT_VISIBLE} && slug.current == $slug]) > 0
+`;
+
+// Slug e data di modifica di ogni progetto pubblicato, per la sitemap.
+export const projectSlugsQuery = groq`
+  *[${PROJECT_VISIBLE}] | order(orderRank asc) { "slug": slug.current, _updatedAt }
 `;
 
 export const categoriesQuery = groq`

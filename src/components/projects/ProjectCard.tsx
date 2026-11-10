@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -25,6 +25,9 @@ interface ProjectCardProps {
   /** Etichetta della skill sopra il titolo. Spenta nelle pagine skill, dove
    *  sarebbe la stessa per tutte le card. */
   showCategory?: boolean;
+  /** Livello del titolo, deciso dalla pagina e non dallo stile (audit §3):
+   *  2 nell'indice /projects, 3 sotto "Guarda il prossimo progetto". */
+  headingLevel?: 2 | 3;
 }
 
 // Forma della cornice, e insieme misura del ritaglio chiesto a Sanity: il
@@ -32,11 +35,16 @@ interface ProjectCardProps {
 // solo se il ritaglio ha già la forma della cornice. 800×760 = 400:380.
 const THUMB = { w: 800, h: 760 };
 
-/** Card progetto condivisa fra dettaglio progetto e /works.
+/** Card progetto condivisa fra dettaglio progetto e /projects.
  *  Hover: il video sostituisce l'immagine e la media zooma. Nessun testo in
  *  sovrimpressione — titolo e categoria stanno sempre sotto. */
-export default function ProjectCard({ project, showCategory }: ProjectCardProps) {
+export default function ProjectCard({ project, showCategory, headingLevel = 3 }: ProjectCardProps) {
   const isMobile = useIsMobile();
+  const uid = useId();
+  const titleId = `${uid}-title`;
+  const categoryId = `${uid}-cat`;
+  const Heading = headingLevel === 2 ? "h2" : "h3";
+  const hasCategory = Boolean(showCategory && project.category?.title);
   const [hovered, setHovered] = useState(false);
   const { videoRef, play, stop } = useHoverVideo();
 
@@ -70,6 +78,9 @@ export default function ProjectCard({ project, showCategory }: ProjectCardProps)
       onMouseLeave={handleLeave}
       onFocus={handleEnter}
       onBlur={handleLeave}
+      // Nome = titolo, una volta sola (l'immagine e' decorativa).
+      aria-labelledby={titleId}
+      aria-describedby={hasCategory ? categoryId : undefined}
       style={{ textDecoration: "none", color: "inherit", display: "block" }}
     >
       <div style={{
@@ -83,7 +94,7 @@ export default function ProjectCard({ project, showCategory }: ProjectCardProps)
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={thumbUrl}
-            alt={project.title}
+            alt=""
             loading="lazy"
             decoding="async"
             style={{
@@ -108,18 +119,18 @@ export default function ProjectCard({ project, showCategory }: ProjectCardProps)
       </div>
 
       <div style={{ padding: "0.9rem 0 0.5rem" }}>
-        {showCategory && project.category?.title && (
-          <p style={{
-            fontSize: "0.6rem",
+        {hasCategory && (
+          <p id={categoryId} style={{
+            fontSize: "max(12px, 0.75rem)",
             letterSpacing: "0.2em",
             color: "#00f5ff",
             textTransform: "uppercase",
             marginBottom: "0.35rem",
           }}>
-            {project.category.title}
+            {project.category!.title}
           </p>
         )}
-        <h3 style={{
+        <Heading id={titleId} style={{
           fontSize: "clamp(1.25rem, 3.2vw, 2rem)",
           fontFamily: "var(--font-space-grotesk), sans-serif",
           fontWeight: 700,
@@ -129,7 +140,7 @@ export default function ProjectCard({ project, showCategory }: ProjectCardProps)
           lineHeight: 1.1,
         }}>
           {project.title}
-        </h3>
+        </Heading>
       </div>
     </Link>
   );

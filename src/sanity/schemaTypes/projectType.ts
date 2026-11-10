@@ -40,7 +40,10 @@ export const projectType = defineType({
           filter: "defined(title)",
         },
       }],
-      description: "Tutte le categorie a cui appartiene il progetto (usate nei filtri della pagina Works)",
+      description: "Tutte le categorie a cui appartiene il progetto (usate nei filtri della pagina Progetti)",
+      // Niente doppioni: la stessa categoria due volte duplicava il tag nella
+      // scheda e rompeva il rendering (chiavi React uguali).
+      validation: (rule) => rule.unique().error("Questa categoria è già nell'elenco: rimuovi il doppione."),
     }),
     defineField({
       name: "description",
@@ -192,6 +195,15 @@ export const projectType = defineType({
           type: "image",
           options: { hotspot: true },
           fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Testo alternativo",
+              description:
+                "Descrive cosa mostra l'immagine a chi non la vede (screen reader). " +
+                "Lascia vuoto se l'immagine e' solo decorativa. Se vuoto si usa la didascalia.",
+              validation: (rule) => rule.max(250),
+            }),
             defineField({ name: "caption", type: "string", title: "Didascalia (opzionale)" }),
           ],
         },

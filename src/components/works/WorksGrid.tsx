@@ -46,20 +46,21 @@ export default function WorksGrid({ projects, categories }: WorksGridProps) {
 
   return (
     <div>
-      {/* Label */}
-      <p style={{
+      {/* Label + chip: destinazione "Filtri" del menu di salto. */}
+      <div id="filtri" tabIndex={-1} className="skip-target">
+      <p id="works-filter-label" style={{
         fontSize: "16px",
         fontFamily: "var(--font-barlow), sans-serif",
         fontWeight: 400,
         letterSpacing: "0.25em",
-        color: "rgba(255,255,255,0.45)",
+        color: "rgba(255,255,255,0.75)",
         marginBottom: "1rem",
       }}>
         Scegli la categoria da esplorare
       </p>
 
       {/* Filter chips */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "4rem" }}>
+      <div role="group" aria-labelledby="works-filter-label" style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "4rem" }}>
         {categories.map((cat) => (
           <FilterChip
             key={cat._id}
@@ -68,6 +69,7 @@ export default function WorksGrid({ projects, categories }: WorksGridProps) {
             onClick={() => toggle(cat._id)}
           />
         ))}
+      </div>
       </div>
 
       {/* Grid — 1 colonna su mobile, 2 su tablet, 3 da desktop */}
@@ -84,9 +86,13 @@ export default function WorksGrid({ projects, categories }: WorksGridProps) {
           .works-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem 2rem; }
         }
       `}</style>
-      <div className="works-grid">
+      {/* Annuncia agli screen reader l'effetto dei filtri (WCAG 4.1.3). */}
+      <p className="sr-only" aria-live="polite">
+        {visible.length === 1 ? "1 progetto" : `${visible.length} progetti`}
+      </p>
+      <div id="elenco-progetti" tabIndex={-1} className="works-grid skip-target">
         {visible.map((project) => (
-          <ProjectCard key={project._id} project={project} showCategory />
+          <ProjectCard key={project._id} project={project} showCategory headingLevel={2} />
         ))}
       </div>
     </div>
