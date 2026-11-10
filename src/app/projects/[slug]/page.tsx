@@ -65,6 +65,14 @@ export default async function ProjectPage({
     notFound();
   }
 
+  // Categorie senza doppioni: se nello Studio la stessa categoria e' stata
+  // aggiunta due volte (successo su Rain Digital Twin), React riceveva due
+  // elementi con la stessa `key` e il tag compariva due volte.
+  const categories: { _id: string; title: string }[] = (project.categories ?? []).filter(
+    (c: { _id?: string } | null, i: number, all: ({ _id?: string } | null)[]) =>
+      c?._id && all.findIndex((o) => o?._id === c._id) === i,
+  );
+
   type NextCard = {
     _id: string;
     title: string;
@@ -135,9 +143,9 @@ export default async function ProjectPage({
             }}>
               {project.title}
             </h1>
-            {project.categories?.length > 0 && (
+            {categories.length > 0 && (
               <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "2rem" }}>
-                {project.categories.map((cat: { _id: string; title: string }) => (
+                {categories.map((cat) => (
                   <span key={cat._id} style={{
                     fontSize: LABEL_SIZE, letterSpacing: "0.2em",
                     color: TEXT_META, textTransform: "uppercase",

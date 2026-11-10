@@ -40,7 +40,10 @@ export const projectType = defineType({
           filter: "defined(title)",
         },
       }],
-      description: "Tutte le categorie a cui appartiene il progetto (usate nei filtri della pagina Works)",
+      description: "Tutte le categorie a cui appartiene il progetto (usate nei filtri della pagina Progetti)",
+      // Niente doppioni: la stessa categoria due volte duplicava il tag nella
+      // scheda e rompeva il rendering (chiavi React uguali).
+      validation: (rule) => rule.unique().error("Questa categoria è già nell'elenco: rimuovi il doppione."),
     }),
     defineField({
       name: "description",

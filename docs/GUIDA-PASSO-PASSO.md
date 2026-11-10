@@ -65,6 +65,8 @@ Sempre nello Studio, apri il progetto, correggi e premi **Publish**.
 - [ ] **"VIDEO INTERFACCIA P333"**: nella descrizione, "LaCimbali" → "La Cimbali"
 - [ ] Cerca e correggi nelle descrizioni: **"Un idea"** → "Un'idea" e **"spazio.Il"** → "spazio. Il"
 - [ ] **"APPLAYDU  HOLOGRAM"**: nel titolo ci sono due spazi tra le parole, lasciane uno solo
+- [ ] **"RAIN DIGITAL TWIN"**: nel campo **"Categorie filtro"** la categoria **"Digital Twin"** compare due volte. Rimuovine una: passa il mouse sulla riga, apri il menu **⋯** a destra → **Remove**. Poi premi **Publish**.
+  Lo Studio ora non accetta categorie ripetute: finché il doppione resta, su questo progetto vedrai un avviso rosso e non potrai pubblicare altre modifiche. Il sito invece funziona già correttamente.
 
 ---
 
