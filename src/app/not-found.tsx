@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
+import SkipLinks from "@/components/layout/SkipLinks";
 import { DiagonalButton } from "@/components/ui/DiagonalButton";
 import { contentContainer } from "@/lib/layout";
 
@@ -15,9 +16,13 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <>
+      <SkipLinks links={[
+        { id: "pagina-non-trovata", label: "Contenuto" },
+        { id: "contatti", label: "Contatti" },
+      ]} />
       <main style={{ background: "#08001a", minHeight: "100vh", color: "#fff" }}>
         <NavbarWrapper />
-        <div style={{
+        <div id="pagina-non-trovata" tabIndex={-1} className="skip-target" style={{
           ...contentContainer,
           minHeight: "100vh",
           display: "flex",

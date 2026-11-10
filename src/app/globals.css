@@ -172,6 +172,59 @@ body {
   }
 }
 
+/* --- Menu di salto (components/layout/SkipLinks.tsx) ------------------------
+   Fuori schermo finche' nessuna voce ha il focus; con il focus compare intero.
+   Ciano #00F5FF con testo #1E0088: stessi colori del menu, ~10:1. */
+.skip-links {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 10000; /* sopra navbar (200) e splash (9999) */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  max-width: calc(100vw - 1.5rem);
+  padding: 0.75rem 1rem;
+  background: #00f5ff;
+  color: #1e0088;
+  font-family: var(--font-barlow), sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  transform: translateY(calc(-100% - 2rem));
+  transition: transform 0.2s ease;
+}
+.skip-links:focus-within { transform: none; }
+.skip-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  list-style: none;
+}
+.skip-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: #1e0088;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.skip-links a:focus-visible {
+  outline: 3px solid #1e0088;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skip-links { transition: none; }
+}
+
+/* Sezioni di destinazione: la barra in alto e' fissa, quindi lasciano spazio
+   sopra; ricevono il focus solo dal menu di salto e non sono controlli, quindi
+   niente anello attorno all'intera sezione. */
+.skip-target { scroll-margin-top: 5rem; }
+.skip-target:focus { outline: none; box-shadow: none; }
+
 /* Testo per soli screen reader (es. "si apre in una nuova scheda"). */
 .sr-only {
   position: absolute;

@@ -139,6 +139,8 @@ export default function Footer() {
       <footer
       ref={footerRef}
       id="contatti"
+      tabIndex={-1}
+      className="skip-target"
       onFocus={revealOnFocus}
       style={{
         position: "fixed",

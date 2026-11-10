@@ -170,6 +170,10 @@ export default function ContactForm({ skills }: { skills: Skill[] }) {
 
   return (
     <form
+      id="modulo"
+      tabIndex={-1}
+      className="skip-target"
+      aria-label="Modulo di contatto"
       onSubmit={handleSubmit}
       aria-busy={submitting}
       style={{ display: "flex", flexDirection: "column", gap: "3rem" }}

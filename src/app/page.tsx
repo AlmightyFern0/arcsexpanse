@@ -1,6 +1,7 @@
 export const revalidate = 30;
 
 import PageLoader from "@/components/layout/PageLoader";
+import SkipLinks from "@/components/layout/SkipLinks";
 import Navbar from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
 import HeroCanvas from "@/components/home/HeroCanvas";
@@ -28,6 +29,12 @@ export default async function Home() {
 
   return (
     <PageLoader startAtTop>
+    <SkipLinks links={[
+      { id: "skills", label: "Skill" },
+      { id: "progetti", label: "Progetti" },
+      { id: "experience", label: "Esperienza" },
+      { id: "contatti", label: "Contatti" },
+    ]} />
     <main style={{ position: "relative" }}>
       <Navbar />
       <HeroAmbientLight />
@@ -79,7 +86,7 @@ export default async function Home() {
       <ProgettiamoDivider />
 
       {/* 3 — Skills */}
-      <section id="skills">
+      <section id="skills" tabIndex={-1} className="skip-target" aria-label="Le nostre skill">
         <SkillsSection skills={skills} />
       </section>
 
@@ -87,7 +94,7 @@ export default async function Home() {
       <ProjectsDivider />
 
       {/* 5 — Griglia progetti */}
-      <section id="progetti">
+      <section id="progetti" tabIndex={-1} className="skip-target" aria-label="I nostri progetti">
         <ProjectsGrid projects={projects} />
       </section>
 

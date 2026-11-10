@@ -30,6 +30,8 @@ export default function CosaVedere() {
       ref={sectionRef}
       // Destinazione della voce di menu "Immersive Experience" (/#experience).
       id="experience"
+      tabIndex={-1}
+      className="skip-target"
       style={{
         // La barra in alto e' fissa: senza, coprirebbe il titolo all'arrivo.
         scrollMarginTop: "5rem",

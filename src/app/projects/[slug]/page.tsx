@@ -6,6 +6,7 @@ import { alternateProjectSlug, normalizeSlugParam } from "@/lib/projectSlugs";
 import Navbar from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
 import PageLoader from "@/components/layout/PageLoader";
+import SkipLinks from "@/components/layout/SkipLinks";
 import HeroAmbientLight from "@/components/home/HeroAmbientLight";
 import SkillProjectGrid from "@/components/skills/SkillProjectGrid";
 import { contentContainer } from "@/lib/layout";
@@ -86,6 +87,12 @@ export default async function ProjectPage({
 
   return (
     <PageLoader>
+    <SkipLinks links={[
+      { id: "progetto", label: "Progetto" },
+      ...(project.listaImmaginiDettaglioProgetto?.length > 0 ? [{ id: "immagini", label: "Immagini" }] : []),
+      ...(nextProjects.length > 0 ? [{ id: "prossimo-progetto", label: "Prossimo progetto" }] : []),
+      { id: "contatti", label: "Contatti" },
+    ]} />
     <main style={{ position: "relative", minHeight: "100vh", color: "#fff" }}>
 
       {/* Navbar condivisa (stessa di home) */}
@@ -99,7 +106,7 @@ export default async function ProjectPage({
       <div style={{ position: "relative", zIndex: 1 }}>
 
       {/* Hero */}
-      <section style={{
+      <section id="progetto" tabIndex={-1} className="skip-target" aria-labelledby="progetto-titolo" style={{
         ...contentContainer,
         paddingTop: "8rem",
         paddingBottom: "4rem",
@@ -121,7 +128,7 @@ export default async function ProjectPage({
             }}>
               {project.category?.title}
             </p>
-            <h1 style={{
+            <h1 id="progetto-titolo" style={{
               fontSize: "clamp(2rem, 5vw, 4rem)", fontWeight: 700,
               letterSpacing: "0.08em", textTransform: "uppercase",
               lineHeight: 1.1, marginBottom: "1.5rem",
@@ -179,7 +186,7 @@ export default async function ProjectPage({
 
       {/* Lista immagini dettaglio progetto — impilate */}
       {project.listaImmaginiDettaglioProgetto?.length > 0 && (
-        <section style={{
+        <section id="immagini" tabIndex={-1} className="skip-target" aria-label="Immagini del progetto" style={{
           ...contentContainer,
           paddingTop: "2rem",
           paddingBottom: "4rem",
@@ -218,12 +225,12 @@ export default async function ProjectPage({
 
       {/* Guarda il prossimo progetto — stessa griglia/carosello delle skill */}
       {nextProjects.length > 0 && (
-        <section style={{ paddingTop: "3rem", paddingBottom: "6rem" }}>
+        <section id="prossimo-progetto" tabIndex={-1} className="skip-target" aria-labelledby="prossimo-titolo" style={{ paddingTop: "3rem", paddingBottom: "6rem" }}>
           {/* Stesso stile degli altri label brevi del sito (footer, "scroll
               to explore"): Barlow 400 a 16px — 12px sotto i 768px via
               `.section-label` — spaziatura 0.3em, testo come scritto. */}
           {/* h2 (audit §3): titolo della sezione, le card sotto sono h3. */}
-          <h2 className="section-label" style={{
+          <h2 id="prossimo-titolo" className="section-label" style={{
             ...contentContainer,
             fontSize: "16px", textAlign: "center",
             fontFamily: "var(--font-barlow), sans-serif", fontWeight: 400,

@@ -46,7 +46,8 @@ export default function WorksGrid({ projects, categories }: WorksGridProps) {
 
   return (
     <div>
-      {/* Label */}
+      {/* Label + chip: destinazione "Filtri" del menu di salto. */}
+      <div id="filtri" tabIndex={-1} className="skip-target">
       <p id="works-filter-label" style={{
         fontSize: "16px",
         fontFamily: "var(--font-barlow), sans-serif",
@@ -69,6 +70,7 @@ export default function WorksGrid({ projects, categories }: WorksGridProps) {
           />
         ))}
       </div>
+      </div>
 
       {/* Grid — 1 colonna su mobile, 2 su tablet, 3 da desktop */}
       <style>{`
@@ -88,7 +90,7 @@ export default function WorksGrid({ projects, categories }: WorksGridProps) {
       <p className="sr-only" aria-live="polite">
         {visible.length === 1 ? "1 progetto" : `${visible.length} progetti`}
       </p>
-      <div className="works-grid">
+      <div id="elenco-progetti" tabIndex={-1} className="works-grid skip-target">
         {visible.map((project) => (
           <ProjectCard key={project._id} project={project} showCategory headingLevel={2} />
         ))}
