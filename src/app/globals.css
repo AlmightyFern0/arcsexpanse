@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  /* `hidden` qui rompe `position: sticky`: un antenato con overflow diverso da
+     visible diventa il contenitore di scorrimento, e gli elementi sticky
+     smettono di ancorarsi al viewport. `clip` taglia allo stesso modo il
+     traboccamento orizzontale delle sezioni full-bleed, ma non crea un
+     contenitore di scorrimento. Le due righe insieme sono una progressione:
+     i browser che non conoscono `clip` ignorano la seconda e tengono `hidden`. */
+  overflow-x: hidden;
+  overflow-x: clip;
+  /* Stesso colore del Plane nella scena 3D (`PLANE_COLOR = 0x060018` in
+     `HeroCanvas.tsx`): la continuità con la dissolvenza del canvas la porta
+     `HeroAmbientLight`, non un gradiente statico qui. */
+  background: #060018;
+  color: white;
+}
+
+/* Placeholder mostrato al posto di una scena Spline finché non è pronta */
+@keyframes spline-placeholder-pulse {
+  0%, 100% { transform: scale(0.88); opacity: 0.35; }
+  50%      { transform: scale(1);    opacity: 0.9;  }
+}
+.spline-placeholder-ring {
+  animation: spline-placeholder-pulse 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spline-placeholder-ring { animation: none; opacity: 0.5; }
+}
+
+/* Attesa dentro il box di ogni skill, finche' la scena Spline non e' a posto.
+   Stessa lingua visiva dello spinner dello splash: anello cyan che gira. */
+.skill-slot-spinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 245, 255, 0.15);
+  border-top-color: #00f5ff;
+  animation: arcs-spin 0.9s linear infinite;
+}
+@keyframes arcs-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skill-slot-spinner { animation: none; opacity: 0.5; }
+}
+
+/* Card descrizione skill (hover). Si accende come un vecchio schermo: un punto
+   cyan, che si stira in una linea, che si apre in verticale nel pannello; il
+   testo arriva per ultimo con un breve sfarfallio. Spegnimento al contrario. */
+.skill-card {
+  position: relative;
+  padding: 1.1rem 1.3rem 1.2rem;
+  background: rgba(6, 0, 24, 0.9);
+  border: 1px solid rgba(0, 245, 255, 0.45);
+  box-shadow: 0 0 24px rgba(0, 245, 255, 0.18), inset 0 0 18px rgba(68, 25, 174, 0.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transform-origin: center;
+  overflow: hidden;
+}
+/* Scanline leggere, solo trama: non devono disturbare la lettura. */
+.skill-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 245, 255, 0.05) 0 1px,
+    transparent 1px 3px
+  );
+  pointer-events: none;
+}
+/* Il lampo dell'accensione: un velo cyan che si spegne quando il pannello e' aperto. */
+.skill-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #00f5ff;
+  opacity: 0;
+  pointer-events: none;
+}
+.skill-card__text { position: relative; }
+
+.skill-card--on { animation: skill-card-on 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.skill-card--on::after { animation: skill-card-flash 520ms ease-out both; }
+.skill-card--on .skill-card__text { animation: skill-card-text 520ms linear both; }
+.skill-card--off { animation: skill-card-off 260ms cubic-bezier(0.6, 0, 0.8, 0.4) both; }
+.skill-card--off::after { animation: skill-card-flash-off 260ms ease-in both; }
+
+@keyframes skill-card-on {
+  0%   { transform: scale(0.02, 0.004); filter: brightness(3); }
+  38%  { transform: scale(1, 0.004);    filter: brightness(2.4); }
+  72%  { transform: scale(1, 1);        filter: brightness(1.4); }
+  100% { transform: scale(1, 1);        filter: brightness(1); }
+}
+@keyframes skill-card-flash {
+  0%, 55% { opacity: 0.9; }
+  100%    { opacity: 0; }
+}
+@keyframes skill-card-text {
+  0%, 68% { opacity: 0; }
+  76%     { opacity: 0.8; }
+  82%     { opacity: 0.25; }
+  90%, 100% { opacity: 1; }
+}
+@keyframes skill-card-off {
+  0%   { transform: scale(1, 1);        filter: brightness(1); }
+  55%  { transform: scale(1, 0.004);    filter: brightness(2.4); }
+  100% { transform: scale(0, 0.004);    filter: brightness(3); opacity: 0; }
+}
+@keyframes skill-card-flash-off {
+  0%   { opacity: 0; }
+  50%, 100% { opacity: 0.9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-card--on, .skill-card--on::after, .skill-card--on .skill-card__text { animation: none; }
+  .skill-card--on { animation: skill-card-fade 200ms ease-out both; }
+  .skill-card--off { animation: skill-card-fade 160ms ease-in reverse both; }
+  .skill-card--off::after { animation: none; }
+}
+@keyframes skill-card-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Focus da tastiera sulla skill: la card e' raggiungibile con Tab. */
+.skill-item:focus-visible {
+  outline: 1px solid #00f5ff;
+  outline-offset: 8px;
+}
+
+/* --- Override size label/testi home su mobile (<=768px) --- */
+@media (max-width: 768px) {
+  .hero-title        { font-size: 24px !important; }
+  .hero-scroll       { font-size: 12px !important; }
+  .progettiamo-title { font-size: 32px !important; }
+  .progettiamo-sub   { font-size: 18px !important; }
+  .skill-label       { font-size: 12px !important; }
+  .section-label     { font-size: 12px !important; }
+  .progetti-title    { font-size: 32px !important; }
+  .progetti-sub      { font-size: 18px !important; }
+  .progetti-label    { font-size: 12px !important; }
+  .cosavedere-title  { font-size: 32px !important; }
+}
