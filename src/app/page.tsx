@@ -14,6 +14,11 @@ import ScrollHint from "@/components/home/ScrollHint";
 import { client } from "@/sanity/lib/client";
 import { projectsQuery, skillsQuery } from "@/sanity/queries";
 import { contentContainer } from "@/lib/layout";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function Home() {
   const [projects, skills] = await Promise.all([
@@ -52,7 +57,8 @@ export default async function Home() {
             alt="Expanse by Arc's"
             style={{ width: "clamp(220px, 55vw, 908px)", height: "auto", objectFit: "contain", marginBottom: "clamp(48px, 12vw, 126px)" }}
           />
-          <h2
+          {/* Unico h1 della home (audit §2): stesso aspetto, cambia solo il tag. */}
+          <h1
             className="hero-title"
             style={{
               fontSize: "44px",
@@ -63,7 +69,7 @@ export default async function Home() {
             }}
           >
             EXPAND BEYOND LIMITS
-          </h2>
+          </h1>
         </div>
 
         <ScrollHint />
@@ -88,9 +94,11 @@ export default async function Home() {
       {/* 6 — Cos'altro c'è da vedere */}
       <CosaVedere />
 
-      {/* 7 — Footer / Contatti */}
-      <Footer />
     </main>
+
+      {/* 7 — Footer / Contatti. Fuori da <main>: dentro non sarebbe il
+          landmark "contentinfo". E' `position: fixed`, la resa non cambia. */}
+      <Footer />
     </PageLoader>
   );
 }

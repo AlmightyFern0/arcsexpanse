@@ -43,6 +43,16 @@ export const projectBySlugQuery = groq`
   }
 `;
 
+// Esistenza di un progetto pubblicato, per i redirect degli slug rinominati.
+export const projectSlugExistsQuery = groq`
+  count(*[${PROJECT_VISIBLE} && slug.current == $slug]) > 0
+`;
+
+// Slug e data di modifica di ogni progetto pubblicato, per la sitemap.
+export const projectSlugsQuery = groq`
+  *[${PROJECT_VISIBLE}] | order(orderRank asc) { "slug": slug.current, _updatedAt }
+`;
+
 export const categoriesQuery = groq`
   *[_type == "category" && hidden != true] | order(orderRank asc) {
     _id,

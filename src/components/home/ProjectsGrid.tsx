@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useId } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -121,6 +121,9 @@ function ProjectCard({
   const [hovered, setHovered] = useState(false);
   const { videoRef, play, stop } = useHoverVideo();
   const wrapRef  = useRef<HTMLDivElement>(null);
+  const uid = useId();
+  const titleId = `${uid}-title`;
+  const categoryId = `${uid}-cat`;
 
   // Ritaglio fatto da Sanity, già nella forma esatta della cornice (vedi
   // `CARD_SIZE`) e centrato sul punto focale che il cliente sceglie nello
@@ -215,10 +218,19 @@ function ProjectCard({
         width: "100%",
         height: "100%",
       }}>
+      {/* Nome del link = titolo (una sola volta: l'immagine e' decorativa),
+          descrizione = categoria. Il focus da tastiera vale come hover, e
+          l'anello e' disegnato all'interno perche' il `clipPath` sopra
+          taglierebbe quello esterno. */}
       <Link
         href={`/projects/${project.slug.current}`}
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
+        onFocus={handleEnter}
+        onBlur={handleLeave}
+        aria-labelledby={titleId}
+        aria-describedby={project.category?.title ? categoryId : undefined}
+        className="focus-inset"
         style={{ textDecoration: "none", display: "block" }}
       >
         <div style={{
@@ -234,7 +246,7 @@ function ProjectCard({
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={thumbUrl}
-              alt={project.title}
+              alt=""
               loading="lazy"
               decoding="async"
               style={{
@@ -266,15 +278,17 @@ function ProjectCard({
             />
           )}
 
-          <div style={{
+          {/* Velo a 0.65: con testo bianco e categoria ciano resta sopra
+              4,5:1 anche su un'immagine bianca. */}
+          <div className="home-card-overlay" style={{
             position: "absolute", inset: 0,
-            background: "rgba(4, 0, 20, 0.58)",
+            background: "rgba(4, 0, 20, 0.65)",
             opacity: hovered ? 1 : 0,
             transition: "opacity 0.4s ease",
             pointerEvents: "none",
           }} />
 
-          <div style={{
+          <div className="home-card-overlay" style={{
             position: "absolute", inset: 0,
             display: "flex", alignItems: "center", justifyContent: "center",
             opacity: hovered ? 1 : 0,
@@ -285,16 +299,18 @@ function ProjectCard({
             padding: "1.5rem",
           }}>
             <div>
-              <p style={{
-                fontSize: "0.6rem",
-                letterSpacing: "0.3em",
-                color: "#00f5ff",
-                textTransform: "uppercase",
-                marginBottom: "0.7rem",
-              }}>
-                {project.category?.title}
-              </p>
-              <h3 style={{
+              {project.category?.title && (
+                <p id={categoryId} style={{
+                  fontSize: "max(12px, 0.75rem)",
+                  letterSpacing: "0.3em",
+                  color: "#00f5ff",
+                  textTransform: "uppercase",
+                  marginBottom: "0.7rem",
+                }}>
+                  {project.category.title}
+                </p>
+              )}
+              <h3 id={titleId} style={{
                 fontSize: "clamp(0.9rem, 2.2vw, 1.6rem)",
                 fontWeight: 700,
                 letterSpacing: "0.08em",
@@ -363,6 +379,13 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
     // rhythm between rows — and, like that gap, it absorbs the parallax drift
     // of the final row instead of letting it crowd the next section.
     <section style={{ position: "relative", zIndex: 1, padding: `5rem 0 ${ROW_GAP}` }}>
+      {/* Su touch non esiste hover: titolo e categoria sempre visibili.
+          `!important` perche' l'opacita' dell'overlay e' uno stile inline. */}
+      <style>{`
+        @media (hover: none) {
+          .home-card-overlay { opacity: 1 !important; transform: none !important; }
+        }
+      `}</style>
       <p className="progetti-label" style={{
         textAlign: "center",
         fontSize: "16px",

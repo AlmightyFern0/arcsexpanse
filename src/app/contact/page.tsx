@@ -6,11 +6,18 @@ import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
 import ContactForm from "./ContactForm";
 import { contentContainer } from "@/lib/layout";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contattaci",
+  alternates: { canonical: "/contact" },
+};
 
 export default async function ContactPage() {
   const skills = await client.fetch(skillsQuery);
 
   return (
+    <>
     <main style={{ background: "#08001a", minHeight: "100vh", color: "#fff" }}>
       <NavbarWrapper />
 
@@ -22,7 +29,9 @@ export default async function ContactPage() {
         <ContactForm skills={skills} />
       </div>
 
-      <Footer />
     </main>
+    {/* Fuori da <main>: e' il landmark "contentinfo". */}
+    <Footer />
+    </>
   );
 }

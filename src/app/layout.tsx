@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import NavigationSplash from "@/components/layout/NavigationSplash";
 import { SPLINE_VIEWER_SRC } from "@/lib/splineViewerSrc";
 import { SPLINE_ENABLED } from "@/lib/featureFlags";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -19,10 +20,13 @@ const barlow = Barlow({
 });
 
 // L'immagine di anteprima dei link e' `opengraph-image.jpg` in questa cartella:
-// Next la aggiunge da solo. Su Vercel l'URL assoluto lo ricava dal dominio di
-// produzione (`VERCEL_PROJECT_PRODUCTION_URL`), senza `metadataBase` a mano.
+// Next la aggiunge da solo, con URL assoluto costruito su `metadataBase`.
+//
+// Titolo: le pagine danno solo il proprio nome ("Progetti"), il template
+// aggiunge il brand (audit §8.3). La home usa `default`.
 export const metadata: Metadata = {
-  title: "Expanse by Arc's",
+  metadataBase: new URL(SITE_URL),
+  title: { default: "Expanse by Arc's", template: "%s | Expanse by Arc's" },
   description: "Expand Beyond Limits",
   openGraph: {
     title: "Expanse by Arc's",

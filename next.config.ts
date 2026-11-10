@@ -24,6 +24,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       })),
       { source: "/skills/:path*", destination: "/", permanent: true },
+      // L'indice progetti si chiamava /works (audit §5). `permanent: true`
+      // risponde 308, equivalente al 301 per SEO e cache: scelta voluta, come
+      // per i redirect /skills sopra. Gli slug rinominati dei singoli progetti
+      // sono gestiti nella pagina progetto (`src/lib/projectSlugs.ts`).
+      { source: "/works", destination: "/projects", permanent: true },
+      { source: "/works/:path*", destination: "/projects/:path*", permanent: true },
     ];
   },
   async headers() {

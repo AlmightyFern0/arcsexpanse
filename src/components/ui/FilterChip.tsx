@@ -21,6 +21,7 @@ export function FilterChip({
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -44,7 +45,7 @@ export function FilterChip({
         <span style={{
           display: "inline-block",
           transform: "skewX(8deg)",
-          fontSize: "0.58rem",
+          fontSize: "max(12px, 0.75rem)",
           letterSpacing: "0.18em",
           textTransform: "uppercase",
           fontFamily: "var(--font-barlow), sans-serif",

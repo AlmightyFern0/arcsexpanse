@@ -27,6 +27,30 @@ const contacts = [
 
 // Tipografia del footer: Figma, 16px @1920 e 12px @390.
 const BODY_SIZE = { desktop: "16px", mobile: "12px" };
+// Blocco legale: mai sotto 14px (audit §1), anche su mobile.
+const LEGAL_SIZE = { desktop: "16px", mobile: "14px" };
+
+// Colori del blocco legale sul viola #4419AE del footer (non sul #060018 del
+// sito): ciano al 55/40/35% dava 3,1 / 2,2 / 1,9:1. Ora 7,8 / 6,5 / 5,9:1,
+// sopra il 4,5:1 di WCAG 1.4.3, con una gerarchia ancora leggibile.
+const LEGAL_COLOR = {
+  primary: "#00f5ff",
+  link: "rgba(0,245,255,0.9)",
+  muted: "rgba(0,245,255,0.85)",
+};
+
+// Area cliccabile minima dei link legali (WCAG 2.5.8: 24×24px).
+const LEGAL_LINK_STYLE: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  minHeight: "24px",
+  minWidth: "24px",
+  textDecoration: "underline",
+  textUnderlineOffset: "0.15em",
+};
+
+// Avviso per screen reader sui link che aprono una nuova scheda (WCAG 3.2.5).
+const NEW_TAB = <span className="sr-only"> (si apre in una nuova scheda)</span>;
 const BODY_LH = 1.2;
 const LABEL_LS = "0.3em";
 
@@ -59,6 +83,14 @@ export default function Footer() {
   );
 
   useCenteredSlot(slotEls, isMobile, setHoveredId);
+
+  // Il footer sta fuori schermo finche' non si arriva in fondo, ma i suoi link
+  // sono raggiungibili con Tab: se il focus ci entra prima, si scorre in fondo
+  // cosi' il footer sale e il focus non resta invisibile.
+  const revealOnFocus = () => {
+    if (revealed) return;
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
+  };
 
   useEffect(() => {
     let raf = 0;
@@ -109,6 +141,7 @@ export default function Footer() {
       <footer
       ref={footerRef}
       id="contatti"
+      onFocus={revealOnFocus}
       style={{
         position: "fixed",
         left: 0,
@@ -172,8 +205,6 @@ export default function Footer() {
             <a
               key={c.id}
               href={c.href}
-              target="_blank"
-              rel="noopener noreferrer"
               onMouseEnter={() => setHoveredId(c.id)}
               onMouseLeave={() => setHoveredId(null)}
               style={{
@@ -230,18 +261,18 @@ export default function Footer() {
         flexDirection: "column",
         gap: "0.4rem",
         fontFamily: "var(--font-barlow), sans-serif",
-        fontSize: isMobile ? BODY_SIZE.mobile : BODY_SIZE.desktop,
+        fontSize: isMobile ? LEGAL_SIZE.mobile : LEGAL_SIZE.desktop,
         lineHeight: BODY_LH,
       }}>
-        <p style={{ color: "rgba(0,245,255,0.55)" }}>
+        <p style={{ color: LEGAL_COLOR.primary }}>
           Arc&apos;s Expanse - Proudly made in{" "}
           <a
             href={ARCS_SITE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: "rgba(0,245,255,0.55)", textDecoration: "underline" }}
+            style={{ ...LEGAL_LINK_STYLE, color: LEGAL_COLOR.primary, fontWeight: 600 }}
           >
-            Arc&apos;s
+            Arc&apos;s{NEW_TAB}
           </a>
         </p>
         <div style={{ display: "flex", gap: "1.5rem" }}>
@@ -249,20 +280,20 @@ export default function Footer() {
             href={PRIVACY_POLICY_URL}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: "rgba(0,245,255,0.4)", textDecoration: "underline" }}
+            style={{ ...LEGAL_LINK_STYLE, color: LEGAL_COLOR.link }}
           >
-            Privacy policy
+            Privacy policy{NEW_TAB}
           </a>
           <a
             href={COOKIE_POLICY_URL}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: "rgba(0,245,255,0.4)", textDecoration: "underline" }}
+            style={{ ...LEGAL_LINK_STYLE, color: LEGAL_COLOR.link }}
           >
-            Cookie policy
+            Cookie policy{NEW_TAB}
           </a>
         </div>
-        <p style={{ color: "rgba(0,245,255,0.35)" }}>
+        <p style={{ color: LEGAL_COLOR.muted }}>
           © 2026
         </p>
       </div>

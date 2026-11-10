@@ -1,13 +1,41 @@
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
-import { projectBySlugQuery, nextProjectsQuery } from "@/sanity/queries";
-import { notFound } from "next/navigation";
+import { projectBySlugQuery, nextProjectsQuery, projectSlugExistsQuery } from "@/sanity/queries";
+import { notFound, permanentRedirect, redirect } from "next/navigation";
+import { alternateProjectSlug, normalizeSlugParam } from "@/lib/projectSlugs";
 import Navbar from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
 import PageLoader from "@/components/layout/PageLoader";
 import HeroAmbientLight from "@/components/home/HeroAmbientLight";
 import SkillProjectGrid from "@/components/skills/SkillProjectGrid";
 import { contentContainer } from "@/lib/layout";
+import type { Metadata } from "next";
+
+// Titoli e didascalie: testo bianco quasi pieno. Il contrasto e' garantito
+// dalla luce del tema attenuata in `HeroAmbientLight` (audit §11): con
+// bianco al 90/85% il caso peggiore resta sopra 4,8:1 su tutti i temi.
+const TEXT_BODY = "rgba(255,255,255,0.9)";
+const TEXT_META = "rgba(255,255,255,0.85)";
+const LABEL_SIZE = "max(12px, 0.75rem)";
+
+/** "APPLAYDU  HOLOGRAM" → "APPLAYDU HOLOGRAM". */
+const cleanTitle = (title: string | undefined) => (title ?? "").replace(/\s+/g, " ").trim();
+
+// Titolo della scheda = titolo del progetto (template in layout.tsx) e
+// canonical sullo slug corrente (audit §8.3).
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const slug = normalizeSlugParam((await params).slug);
+  const project = await client.fetch(projectBySlugQuery, { slug });
+  if (!project) return {};
+  return {
+    title: cleanTitle(project.title),
+    alternates: { canonical: `/projects/${encodeURIComponent(slug)}` },
+  };
+}
 
 // Sanity codifica le dimensioni originali nel ref dell'asset
 // (`image-<hash>-<width>x<height>-<format>`): evita una query aggiuntiva per
@@ -22,9 +50,19 @@ export default async function ProjectPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
+  const slug = normalizeSlugParam((await params).slug);
   const project = await client.fetch(projectBySlugQuery, { slug });
-  if (!project) notFound();
+  if (!project) {
+    // Slug rinominato (audit §9): redirect solo se la destinazione esiste,
+    // altrimenti 404 vero. Gli slug mai esistiti finiscono in `not-found.tsx`.
+    const alt = alternateProjectSlug(slug);
+    if (alt && (await client.fetch(projectSlugExistsQuery, { slug: alt.slug }))) {
+      const to = `/projects/${encodeURIComponent(alt.slug)}`;
+      if (alt.permanent) permanentRedirect(to);
+      redirect(to);
+    }
+    notFound();
+  }
 
   type NextCard = {
     _id: string;
@@ -78,7 +116,7 @@ export default async function ProjectPage({
           {/* Sinistra — testi */}
           <div>
             <p style={{
-              fontSize: "0.65rem", letterSpacing: "0.35em", color: "#00f5ff",
+              fontSize: LABEL_SIZE, letterSpacing: "0.35em", color: "#00f5ff",
               textTransform: "uppercase", marginBottom: "1rem",
             }}>
               {project.category?.title}
@@ -94,8 +132,8 @@ export default async function ProjectPage({
               <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: "2rem" }}>
                 {project.categories.map((cat: { _id: string; title: string }) => (
                   <span key={cat._id} style={{
-                    fontSize: "0.65rem", letterSpacing: "0.2em",
-                    color: "#ffffff55", textTransform: "uppercase",
+                    fontSize: LABEL_SIZE, letterSpacing: "0.2em",
+                    color: TEXT_META, textTransform: "uppercase",
                   }}>
                     {cat.title}
                   </span>
@@ -104,7 +142,7 @@ export default async function ProjectPage({
             )}
             {project.description && (
               <p style={{
-                fontSize: "0.9rem", lineHeight: 1.8, color: "#ffffffbb",
+                fontSize: "0.9rem", lineHeight: 1.8, color: TEXT_BODY,
                 maxWidth: "480px",
                 whiteSpace: "pre-line",
               }}>
@@ -129,6 +167,8 @@ export default async function ProjectPage({
             {project.heroType === "iframe" && project.heroIframeUrl && (
               <iframe
                 src={project.heroIframeUrl}
+                title={`Video o vista 3D del progetto ${cleanTitle(project.title)}`}
+                referrerPolicy="strict-origin-when-cross-origin"
                 style={{ width: "100%", height: "100%", border: "none" }}
                 allowFullScreen
               />
@@ -163,8 +203,8 @@ export default async function ProjectPage({
               />
               {img.caption && (
                 <figcaption style={{
-                  marginTop: "0.6rem", fontSize: "0.7rem", letterSpacing: "0.1em",
-                  color: "#ffffff66", textTransform: "uppercase",
+                  marginTop: "0.6rem", fontSize: LABEL_SIZE, letterSpacing: "0.1em",
+                  color: TEXT_META, textTransform: "uppercase",
                 }}>
                   {img.caption}
                 </figcaption>
@@ -181,7 +221,8 @@ export default async function ProjectPage({
           {/* Stesso stile degli altri label brevi del sito (footer, "scroll
               to explore"): Barlow 400 a 16px — 12px sotto i 768px via
               `.section-label` — spaziatura 0.3em, testo come scritto. */}
-          <p className="section-label" style={{
+          {/* h2 (audit §3): titolo della sezione, le card sotto sono h3. */}
+          <h2 className="section-label" style={{
             ...contentContainer,
             fontSize: "16px", textAlign: "center",
             fontFamily: "var(--font-barlow), sans-serif", fontWeight: 400,
@@ -189,14 +230,16 @@ export default async function ProjectPage({
             color: "#00f5ff", marginBottom: "2.5rem",
           }}>
             Guarda il prossimo progetto
-          </p>
+          </h2>
           <SkillProjectGrid projects={nextProjects} showCategory />
         </section>
       )}
 
-      <Footer />
       </div>
     </main>
+
+    {/* Fuori da <main>: e' il landmark "contentinfo". */}
+    <Footer />
     </PageLoader>
   );
 }

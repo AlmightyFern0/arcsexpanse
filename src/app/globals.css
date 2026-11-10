@@ -134,10 +134,55 @@ body {
   to   { opacity: 1; }
 }
 
-/* Focus da tastiera sulla skill: la card e' raggiungibile con Tab. */
+/* --- Focus da tastiera (audit §6, WCAG 2.4.7 / 1.4.11) ---------------------
+   Anello a due toni: bianco fuori, scuro dentro. Il bianco si legge sui fondi
+   scuri, lo scuro sui temi chiari delle schede progetto: almeno uno dei due
+   resta sopra 3:1 contro lo sfondo adiacente, qualunque esso sia.
+   `:where()` tiene la specificità a zero, così le regole di componente sotto
+   (menu su fondo ciano, card ritagliate) la sovrascrivono senza !important.
+   Solo `:focus-visible`: il click col mouse non mostra l'anello. */
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px #060018;
+}
+
+/* Elementi dentro un antenato con `clip-path` (card della home): un anello
+   esterno verrebbe tagliato via, quindi lo si disegna all'interno. */
+.focus-inset:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -6px;
+  box-shadow: inset 0 0 0 4px #060018;
+}
+
+/* Focus da tastiera sulla skill: la card e' raggiungibile con Tab. Ciano su
+   viola #4419AE = 7,7:1. */
 .skill-item:focus-visible {
-  outline: 1px solid #00f5ff;
+  outline: 2px solid #00f5ff;
   outline-offset: 8px;
+  box-shadow: none;
+}
+
+/* In alto contrasto il sistema sceglie i colori: l'anello resta, l'ombra no. */
+@media (forced-colors: active) {
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible,
+  .focus-inset:focus-visible {
+    outline: 2px solid CanvasText;
+    box-shadow: none;
+  }
+}
+
+/* Testo per soli screen reader (es. "si apre in una nuova scheda"). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* --- Override size label/testi home su mobile (<=768px) --- */

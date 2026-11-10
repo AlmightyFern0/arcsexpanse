@@ -18,6 +18,12 @@ export default function ProgettiamoDivider() {
     const subtitle = subtitleRef.current;
     if (!section || !title || !subtitle) return;
 
+    // Movimento ridotto: titoli subito visibili, nessuna animazione.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set([title, subtitle], { opacity: 1, y: 0 });
+      return;
+    }
+
     const t1 = gsap.fromTo(
       title,
       { y: 50, opacity: 0 },
@@ -86,7 +92,9 @@ export default function ProgettiamoDivider() {
           opacity: 0, // parte invisibile, GSAP la porta a 1
         }}
       >
-        PROGETTIAMO MONDI
+        {/* Lo spazio prima del <br> tiene separate le parole nel nome
+            accessibile ("MONDI CHE", non "MONDICHE"). */}
+        PROGETTIAMO MONDI{" "}
         <br />
         CHE NON ESISTONO ANCORA
       </h2>

@@ -5,8 +5,8 @@
 export const SKILL_PROJECTS: Record<string, string> = {
   "product-conception": "frecciarossa-onboard-trolley",
   "ai-content-design": "campari-spritz-hologram",
-  "virtual-immersive-worlds": "campari-virtual-experience",
-  "marketing-visualization": "nutella-croissant-shopper-journey-strategy",
+  "virtual-immersive-worlds": "concept-campari-virtual-experience",
+  "marketing-visualization": "nutella-croissant-shopper-journey",
   "3d-direction": "rain-digital-twin",
   "physical-experiences": "travel-lounge-concept",
 };

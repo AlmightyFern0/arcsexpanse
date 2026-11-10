@@ -42,7 +42,7 @@ export default function SkillProjectGrid({
               key={project._id}
               style={{ flex: "0 0 76vw", maxWidth: 380, scrollSnapAlign: "start" }}
             >
-              <ProjectCard project={project} showCategory={showCategory} />
+              <ProjectCard project={project} showCategory={showCategory} headingLevel={3} />
             </div>
           ))}
         </div>
@@ -58,7 +58,7 @@ export default function SkillProjectGrid({
       gap: "3rem 2rem",
     }}>
       {projects.map((project) => (
-        <ProjectCard key={project._id} project={project} showCategory={showCategory} />
+        <ProjectCard key={project._id} project={project} showCategory={showCategory} headingLevel={3} />
       ))}
     </div>
   );
