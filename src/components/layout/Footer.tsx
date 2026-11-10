@@ -5,10 +5,8 @@ import FooterArtworkSvg, { ARTWORK_SLOT } from "@/components/footer/FooterArtwor
 import { EMAIL_ARTWORK, FORM_ARTWORK } from "@/components/footer/footerArtworkData";
 import { useCenteredSlot } from "@/hooks/useCenteredSlot";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { ARCS_SITE_URL, COOKIE_POLICY_URL, PRIVACY_POLICY_URL } from "@/lib/site";
 
-const ARCS_SITE_URL      = "https://www.arcs-design.com/";
-const PRIVACY_POLICY_URL = "https://www.arcs-design.com/en/3/privacy-policy/";
-const COOKIE_POLICY_URL  = "https://www.arcs-design.com/en/51/cookie-policy/";
 
 const contacts = [
   {

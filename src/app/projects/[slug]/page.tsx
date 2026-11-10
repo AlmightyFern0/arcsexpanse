@@ -187,14 +187,15 @@ export default async function ProjectPage({
           flexDirection: "column",
           gap: "75px",
         }}>
-          {project.listaImmaginiDettaglioProgetto.map((img: { _key: string; caption?: string; asset?: { _ref?: string } }, i: number) => {
+          {project.listaImmaginiDettaglioProgetto.map((img: { _key: string; alt?: string; caption?: string; asset?: { _ref?: string } }, i: number) => {
             const dims = imageDimensions(img.asset?._ref) ?? { width: 1920, height: 1080 };
             return (
             <figure key={(img._key as string) ?? i} style={{ margin: 0 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={urlFor(img as object).width(1920).auto("format").quality(75).url()}
-                alt={img.caption ?? ""}
+                // Alt dal campo dedicato, poi didascalia, poi decorativa.
+                alt={img.alt?.trim() || img.caption || ""}
                 width={dims.width}
                 height={dims.height}
                 loading="lazy"

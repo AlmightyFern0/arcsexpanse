@@ -18,7 +18,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...projects
       .filter((p) => p.slug)
       .map((p) => ({
-        url: `${SITE_URL}/projects/${encodeURIComponent(p.slug)}`,
+        // encodeURIComponent lascia passare l'apostrofo: va codificato a mano.
+        url: `${SITE_URL}/projects/${encodeURIComponent(p.slug).replace(/'/g, "%27")}`,
         lastModified: new Date(p._updatedAt),
       })),
   ];

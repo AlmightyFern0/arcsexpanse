@@ -28,7 +28,11 @@ export default function CosaVedere() {
   return (
     <section
       ref={sectionRef}
+      // Destinazione della voce di menu "Immersive Experience" (/#experience).
+      id="experience"
       style={{
+        // La barra in alto e' fissa: senza, coprirebbe il titolo all'arrivo.
+        scrollMarginTop: "5rem",
         position: "relative",
         zIndex: 1,
         display: "flex",

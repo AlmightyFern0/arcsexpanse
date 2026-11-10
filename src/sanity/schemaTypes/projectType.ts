@@ -192,6 +192,15 @@ export const projectType = defineType({
           type: "image",
           options: { hotspot: true },
           fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Testo alternativo",
+              description:
+                "Descrive cosa mostra l'immagine a chi non la vede (screen reader). " +
+                "Lascia vuoto se l'immagine e' solo decorativa. Se vuoto si usa la didascalia.",
+              validation: (rule) => rule.max(250),
+            }),
             defineField({ name: "caption", type: "string", title: "Didascalia (opzionale)" }),
           ],
         },

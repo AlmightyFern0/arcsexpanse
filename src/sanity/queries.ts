@@ -1,8 +1,6 @@
 import { groq } from "next-sanity";
 
-// Un progetto è pubblicato solo se è visibile *e* lo è la sua skill
-// (`project.category` è un reference a skill, nonostante il nome).
-const PROJECT_VISIBLE = `_type == "project" && visible == true && category->visible != false`;
+import { PROJECT_VISIBLE } from "./filters";
 
 // Le categorie nascoste spariscono dall'elenco del progetto, senza nascondere
 // il progetto stesso.
