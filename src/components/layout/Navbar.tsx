@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef, useCallback, type CSSProperties } from "react";
 import Link from "next/link";
 import { skillProjectHref } from "@/lib/skillProjects";
+import { setScrollLock } from "@/lib/smoothScroll";
+import SmoothScrollToggle from "./SmoothScrollToggle";
 
 interface Skill {
   _id: string;
@@ -106,7 +108,12 @@ export default function Navbar({ skills }: NavbarProps) {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    // Con lo scorrimento fluido la rotella la gestisce Lenis: va fermato.
+    setScrollLock("menu", open);
+    return () => {
+      document.body.style.overflow = "";
+      setScrollLock("menu", false);
+    };
   }, [open]);
 
   // Menu aperto: resto della pagina inerte (né Tab né screen reader ci
@@ -215,6 +222,8 @@ export default function Navbar({ skills }: NavbarProps) {
       <div
         ref={overlayRef}
         className="site-menu-overlay"
+        // Il pannello scorre da solo (overflowY auto): Lenis non lo tocca.
+        data-lenis-prevent
         inert={!open}
         style={{
           position: "fixed", inset: 0, zIndex: 199,
@@ -332,6 +341,31 @@ export default function Navbar({ skills }: NavbarProps) {
             >
               Immersive Experience
             </Link>
+          </div>
+
+          {/* Preferenza di movimento, anche per chi usa il mouse (per la
+              tastiera c'e' pure nel menu di salto). */}
+          <div>
+            <p style={{ ...SECTION_LABEL_STYLE, marginBottom: "0.3rem" }}>
+              Preferenze
+            </p>
+            <SmoothScrollToggle
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                minHeight: "24px",
+                padding: 0,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "var(--font-barlow), sans-serif",
+                fontSize: "16px",
+                letterSpacing: "0.05em",
+                color: MENU_TEXT,
+                textDecoration: "underline",
+                textUnderlineOffset: "0.2em",
+              }}
+            />
           </div>
         </nav>
       </div>

@@ -28,12 +28,12 @@ export default function ProjectsDivider() {
     const t1 = gsap.fromTo(title,
       { y: 40, opacity: 0 },
       { y: 0, opacity: 1, duration: 1.2, ease: "power3.out",
-        scrollTrigger: { trigger: section, start: "top 70%", toggleActions: "play none none reset" } }
+        scrollTrigger: { trigger: section, start: "top 70%", once: true } }
     );
     const t2 = gsap.fromTo(subtitle,
       { y: 25, opacity: 0 },
       { y: 0, opacity: 1, duration: 1.2, delay: 0.2, ease: "power3.out",
-        scrollTrigger: { trigger: section, start: "top 70%", toggleActions: "play none none reset" } }
+        scrollTrigger: { trigger: section, start: "top 70%", once: true } }
     );
 
     return () => {

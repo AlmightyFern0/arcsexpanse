@@ -26,6 +26,17 @@ export interface ContactFormData {
 type Result = { ok: boolean; error?: string };
 
 // Messaggi all'utente: generici, mai dettagli del provider o stack (§12.3).
+// Mittente e destinatario delle email del form. Il mittente richiede il
+// dominio arcs-expanse.com verificato su Resend (resend.com → Domains).
+const CONTACT_FROM = "Expanse Form <form@arcs-expanse.com>";
+const CONTACT_FROM_FALLBACK = "Expanse Form <onboarding@resend.dev>";
+const CONTACT_TO = "studio@arcs-expanse.com";
+
+/** Errore Resend "dominio non verificato" (403 con messaggio sul dominio). */
+function isUnverifiedDomain(error: { message: string; statusCode: number | null }): boolean {
+  return error.statusCode === 403 && /domain/i.test(error.message) && /verif/i.test(error.message);
+}
+
 const GENERIC_ERROR = "Invio non riuscito, riprova tra poco.";
 const RATE_LIMIT_ERROR = "Troppi invii. Riprova tra qualche minuto.";
 
@@ -179,9 +190,8 @@ export async function sendContactEmail(data: ContactFormData): Promise<Result> {
     // `from` e `to` fissi; l'unico header da input utente e' `replyTo`, con
     // l'email gia' validata e ripulita da CR/LF. Oggetto da `input.nome`, gia'
     // su una riga sola (in testo, non HTML: niente escape qui).
-    const { error } = await resend.emails.send({
-      from: "Expanse Form <onboarding@resend.dev>",
-      to: "studio@arcs-design.com",
+    const message = {
+      to: CONTACT_TO,
       replyTo: input.email,
       subject: `Nuovo contatto: ${input.nome}`,
       text: [
@@ -203,7 +213,15 @@ export async function sendContactEmail(data: ContactFormData): Promise<Result> {
         <p><strong>Categoria:</strong> ${categoria || "—"}</p>
         <p><strong>Tag selezionati:</strong> ${tags.length > 0 ? tags.join(", ") : "—"}</p>
       `,
-    });
+    };
+    let { error } = await resend.emails.send({ from: CONTACT_FROM, ...message });
+    // Dominio non ancora verificato su Resend: si ripiega sul mittente di
+    // prova, cosi' il form non si rompe nell'attesa. Nessun doppio invio: se
+    // il primo tentativo e' rifiutato, non e' partito nulla.
+    if (error && isUnverifiedDomain(error)) {
+      console.warn("[contact] dominio mittente non verificato su Resend: uso il mittente di prova");
+      ({ error } = await resend.emails.send({ from: CONTACT_FROM_FALLBACK, ...message }));
+    }
     // L'SDK Resend non lancia: l'errore torna nel risultato. Prima veniva
     // ignorato e l'utente vedeva "inviato" anche quando non lo era.
     if (error) {

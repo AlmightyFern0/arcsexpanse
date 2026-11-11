@@ -11,6 +11,8 @@ import SkillsSection from "@/components/home/SkillsSection";
 import ProjectsDivider from "@/components/home/ProjectsDivider";
 import ProjectsGrid from "@/components/home/ProjectsGrid";
 import CosaVedere from "@/components/home/CosaVedere";
+import ExpanseEmbed from "@/components/home/ExpanseEmbed";
+import PurpleBand from "@/components/home/PurpleBand";
 import ScrollHint from "@/components/home/ScrollHint";
 import { client } from "@/sanity/lib/client";
 import { projectsQuery, skillsQuery } from "@/sanity/queries";
@@ -30,9 +32,9 @@ export default async function Home() {
   return (
     <PageLoader startAtTop>
     <SkipLinks links={[
+      { id: "experience", label: "Esperienza" },
       { id: "skills", label: "Skill" },
       { id: "progetti", label: "Progetti" },
-      { id: "experience", label: "Esperienza" },
       { id: "contatti", label: "Contatti" },
     ]} />
     <main style={{ position: "relative" }}>
@@ -82,13 +84,17 @@ export default async function Home() {
         <ScrollHint />
       </section>
 
-      {/* 2 — Progettiamo mondi */}
-      <ProgettiamoDivider />
-
-      {/* 3 — Skills */}
-      <section id="skills" tabIndex={-1} className="skip-target" aria-label="Le nostre skill">
-        <SkillsSection skills={skills} />
-      </section>
+      {/* 2 — Progettiamo mondi + esperienza Expanse (iframe), su un unico
+          sfondo viola con le diagonali come le skill */}
+      <PurpleBand>
+        <ProgettiamoDivider />
+        <ExpanseEmbed />
+        
+        {/* 3 — Skills */}
+        <section id="skills" tabIndex={-1} className="skip-target" aria-label="Le nostre skill">
+          <SkillsSection skills={skills} />
+        </section>
+      </PurpleBand>
 
       {/* 4 — Divider progetti */}
       <ProjectsDivider />

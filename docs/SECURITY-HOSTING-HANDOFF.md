@@ -72,7 +72,7 @@ Superficie principale = form contatti (`src/app/contact/actions.ts`, server acti
 - [x] **Fix 4 — Security headers** in `next.config.ts`: HSTS, `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`. ✅ (CSP completa NON inclusa — vedi sotto)
 - [x] **Fix 6 — Honeypot** campo nascosto `website` nel form + scarto server-side. ✅
 - [x] **Fix 2 — Rate limiting** ✅ FATTO + testato. Upstash Redis, 5 invii/10min per IP. Modulo `src/lib/ratelimit.ts`, check in `sendContactEmail` via `x-forwarded-for`. Env: `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` (in `.env.local` e su Vercel). Se env mancano → limite saltato (dev).
-- [ ] **Fix 5 — Verifica dominio Resend**, cambia `from` da `onboarding@resend.dev` a dominio ARCS. ⏳ richiede DNS.
+- [ ] **Fix 5 — Verifica dominio Resend**: `from` già cambiato in `form@arcs-design.com` (con ripiego automatico su `onboarding@resend.dev` finché Resend risponde 403 "domain not verified"). Resta la verifica DNS di `arcs-design.com` su Resend. ⏳ richiede DNS.
 - [~] **CSP** — attiva in **Report-Only** (`next.config.ts`, esclusa `/studio`). Da passare in enforcement dopo aver navigato home, /projects, le schede (iframe Cloudinary, net-fs, myarstudio) e /contact senza violazioni in console. Un nuovo host di iframe inserito nello Studio va aggiunto a `frame-src`.
 
 ### Audit 2026-11-10 (§12, branch `fix/audit-wcag-sicurezza`)
@@ -92,7 +92,7 @@ Superficie principale = form contatti (`src/app/contact/actions.ts`, server acti
 
 - Fix applicati + testati: 1, 2, 3, 4, 6 ✅ (2026-07). Tutti i critici/alti chiusi.
 - **Aperti (in lista per dopo):**
-  1. **Dominio Resend (Fix 5)** — verifica DNS dominio ARCS, aggiorna `from` (ora `onboarding@resend.dev`).
+  1. **Dominio Resend (Fix 5)** — verifica DNS di `arcs-design.com`; il `from` è già `form@arcs-design.com`.
   2. **CSP completa** — test contro Spline/Studio/iframe.
 - Env su Vercel (Settings → Environment Variables): `RESEND_API_KEY` + 3 Sanity + `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` — tutte messe ✅.
 - Note stack: Next.js 15 App Router, React 19, TS. Styling inline (NON Tailwind). `@/*` → `./src/*`.

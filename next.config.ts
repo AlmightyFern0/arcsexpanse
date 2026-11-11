@@ -22,7 +22,10 @@ const securityHeaders = [
 //   dinamico di ogni pagina e spegnerebbe l'ISR.
 // - 'wasm-unsafe-eval' + blob: worker: runtime Spline.
 // - frame-src: host degli iframe che oggi arrivano da Sanity
-//   (`heroIframeUrl`). Un host nuovo inserito nello Studio va aggiunto qui.
+//   (`heroIframeUrl`) e dell'esperienza Expanse in home. Un host nuovo
+//   inserito nello Studio va aggiunto qui. net-fs e' ristretto al percorso
+//   del nostro account (`/hosting/8574980/`): il dominio e' condiviso con gli
+//   altri clienti net-fs, i loro contenuti non devono poter essere incorniciati.
 // - /studio escluso: Sanity Studio va verificato a parte (vedi handoff).
 const isDev = process.env.NODE_ENV !== "production";
 const csp = [
@@ -33,7 +36,7 @@ const csp = [
   "media-src 'self' blob: https://cdn.sanity.io",
   "font-src 'self' data:",
   "connect-src 'self' https://*.sanity.io wss://*.sanity.io https://prod.spline.design https://unpkg.com https://challenges.cloudflare.com https://va.vercel-scripts.com https://vitals.vercel-insights.com",
-  "frame-src https://player.cloudinary.com https://storage.net-fs.com https://cdn.myarstudio.cloud https://challenges.cloudflare.com",
+  "frame-src https://player.cloudinary.com https://storage.net-fs.com/hosting/8574980/ https://cdn.myarstudio.cloud https://challenges.cloudflare.com",
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",

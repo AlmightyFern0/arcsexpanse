@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { scrollPageTo } from "@/lib/smoothScroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,7 +36,7 @@ export default function ScrollHint() {
   }, []);
 
   const scrollToNext = () => {
-    window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
+    scrollPageTo(window.innerHeight);
   };
 
   return (

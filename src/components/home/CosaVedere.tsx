@@ -1,40 +1,12 @@
-"use client";
-
-import { useRef } from "react";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { useNearViewport } from "@/hooks/useNearViewport";
-import PortalCanvas from "@/components/home/PortalCanvas";
 import { DiagonalButton } from "@/components/ui/DiagonalButton";
 import { contentContainer } from "@/lib/layout";
 
-// Immagine vista "dall'altra parte" del portale — lo screen della pagina di
-// ingresso dell'esperienza Expanse. Va salvata in public/ con questo nome.
-// Se manca, il portale mostra il vuoto scuro invece di rompersi.
-const PORTAL_IMAGE = "/portal.jpg";
-
-const EXPANSE_URL = "https://storage.net-fs.com/hosting/8574980/4/";
-
-// Margine laterale del portale su mobile, in px dai bordi dello schermo.
-const MOBILE_SIDE_MARGIN = 24;
-
+// Il portale verso l'esperienza Expanse e' diventato un iframe
+// (ExpanseEmbed), spostato in alto subito dopo "Progettiamo mondi".
 export default function CosaVedere() {
-  const isMobile = useIsMobile();
-
-  // Terza superficie WebGL della pagina, e la più in basso: non serve
-  // all'atterraggio.
-  const sectionRef = useRef<HTMLElement>(null);
-  const nearViewport = useNearViewport(sectionRef);
-
   return (
     <section
-      ref={sectionRef}
-      // Destinazione della voce di menu "Immersive Experience" (/#experience).
-      id="experience"
-      tabIndex={-1}
-      className="skip-target"
       style={{
-        // La barra in alto e' fissa: senza, coprirebbe il titolo all'arrivo.
-        scrollMarginTop: "5rem",
         position: "relative",
         zIndex: 1,
         display: "flex",
@@ -47,6 +19,7 @@ export default function CosaVedere() {
     >
       <div style={{
         position: "relative",
+        marginTop: "16rem",
         zIndex: 1,
         display: "flex",
         flexDirection: "column",
@@ -71,33 +44,6 @@ export default function CosaVedere() {
         <div>
           <DiagonalButton href="/projects">Voglio scoprirlo →</DiagonalButton>
         </div>
-
-        <a
-          href={EXPANSE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          // Il nome sta sul link, non sul canvas: il canvas si monta solo vicino
-          // al viewport, e prima il link restava senza nome accessibile.
-          aria-label="Entra nell'esperienza Expanse (si apre in una nuova scheda)"
-          style={{
-            display: "block",
-            // Su mobile il portale esce dai margini del content container e
-            // arriva a 24px dai bordi dello schermo. Il genitore centra in
-            // flex, quindi la larghezza extra sborda in modo simmetrico.
-            width: isMobile ? `calc(100vw - ${MOBILE_SIDE_MARGIN * 2}px)` : "100%",
-            maxWidth: isMobile ? "none" : 900,
-            aspectRatio: "4 / 3",
-            marginTop: "6rem",
-            cursor: "pointer",
-          }}
-        >
-          {nearViewport && (
-            <PortalCanvas
-              imageUrl={PORTAL_IMAGE}
-              activateOnCenter={isMobile}
-            />
-          )}
-        </a>
       </div>
     </section>
   );

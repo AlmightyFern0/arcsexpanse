@@ -195,13 +195,20 @@ body {
   transition: transform 0.2s ease;
 }
 .skip-links:focus-within { transform: none; }
+.skip-links nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
 .skip-links ul {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem 1rem;
   list-style: none;
 }
-.skip-links a {
+.skip-links a,
+.skip-links__toggle {
   display: inline-flex;
   align-items: center;
   min-height: 32px;
@@ -210,7 +217,17 @@ body {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
-.skip-links a:focus-visible {
+/* Pulsante "Disattiva scorrimento fluido": stesso aspetto dei link. */
+.skip-links__toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+.skip-links a:focus-visible,
+.skip-links__toggle:focus-visible {
   outline: 3px solid #1e0088;
   outline-offset: 2px;
   box-shadow: none;
@@ -219,10 +236,13 @@ body {
   .skip-links { transition: none; }
 }
 
-/* Sezioni di destinazione: la barra in alto e' fissa, quindi lasciano spazio
-   sopra; ricevono il focus solo dal menu di salto e non sono controlli, quindi
-   niente anello attorno all'intera sezione. */
-.skip-target { scroll-margin-top: 5rem; }
+/* La barra in alto e' fissa: ancore, menu di salto e `scrollIntoView()` sul
+   focus (SmoothScroll.tsx) lasciano 5rem sopra, cosi' la barra non copre
+   l'elemento di arrivo. */
+html { scroll-padding-top: 5rem; }
+
+/* Sezioni di destinazione: ricevono il focus solo dal menu di salto e non sono
+   controlli, quindi niente anello attorno all'intera sezione. */
 .skip-target:focus { outline: none; box-shadow: none; }
 
 /* Testo per soli screen reader (es. "si apre in una nuova scheda"). */
