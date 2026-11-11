@@ -92,8 +92,20 @@ export default function ExpanseEmbed() {
           src={EXPANSE_URL}
           title="Esperienza interattiva Expanse"
           loading="lazy"
-          allow="fullscreen; gyroscope; accelerometer; xr-spatial-tracking; autoplay"
+          // Permessi minimi: schermo intero e sensori di movimento per il 360°
+          // da telefono. Tolti realta' virtuale (WebXR) e autoplay: il tour
+          // non li usa, e l'audio parte comunque dopo il clic dell'utente.
+          allow="fullscreen; gyroscope; accelerometer"
           allowFullScreen
+          // Sandbox: script, risorse del tour e popup (link di condivisione,
+          // schede esterne) restano permessi; NON e' permesso navigare la
+          // scheda principale, cosi' il tour non puo' portare chi visita su un
+          // altro sito restando "dentro" arcs-expanse.com.
+          // `allow-same-origin` e' sicuro qui perche' l'iframe e' di un altro
+          // dominio: serve solo a fargli caricare i propri file.
+          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          // Nessun indirizzo della nostra pagina inviato a net-fs.
+          referrerPolicy="no-referrer"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
         />
 
