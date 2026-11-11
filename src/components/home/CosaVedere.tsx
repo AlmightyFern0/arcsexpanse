@@ -19,6 +19,7 @@ export default function CosaVedere() {
     >
       <div style={{
         position: "relative",
+        marginTop: "16rem",
         zIndex: 1,
         display: "flex",
         flexDirection: "column",

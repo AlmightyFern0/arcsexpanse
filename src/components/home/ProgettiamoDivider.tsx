@@ -69,7 +69,10 @@ export default function ProgettiamoDivider() {
       style={{
         position: "relative",
         zIndex: 1,
-        minHeight: "80vh",
+        // Spazio ridotto (prima minHeight 80vh centrato): il blocco sta piu'
+        // vicino all'esperienza Expanse che segue.
+        paddingTop: "8rem",
+        paddingBottom: "3rem",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

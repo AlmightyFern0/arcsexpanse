@@ -8,9 +8,27 @@ import { contentContainer } from "@/lib/layout";
 // Host gia' ammesso in `frame-src` nella CSP di next.config.ts.
 const EXPANSE_URL = "https://storage.net-fs.com/hosting/8574980/4/";
 
-// Fondo del pulsante sopra l'iframe: il contenuto sotto puo' essere chiaro, e
-// il testo ciano a 11px deve restare sopra 4,5:1 (su questo fondo ~11:1).
-const BUTTON_FILL = "rgba(6, 0, 24, 0.85)";
+// Colore di fondo della pagina (#060018, vedi globals.css).
+const PAGE_BG = "6, 0, 24";
+
+// Velo sopra l'iframe inattivo: stesso colore della pagina, molto scuro.
+const OVERLAY_BG = `rgba(${PAGE_BG}, 0.85)`;
+
+// Fondo del pulsante: il contenuto sotto puo' essere chiaro, e il testo ciano
+// a 11px deve restare sopra 4,5:1 (su questo fondo ~11:1).
+const BUTTON_FILL = `rgba(${PAGE_BG}, 0.85)`;
+
+// Sfumature in alto e in basso che fondono i bordi dell'iframe con la pagina.
+const FADE_HEIGHT = "12%";
+const fadeStyle = (edge: "top" | "bottom"): React.CSSProperties => ({
+  position: "absolute",
+  left: 0,
+  right: 0,
+  [edge]: 0,
+  height: FADE_HEIGHT,
+  background: `linear-gradient(to ${edge === "top" ? "bottom" : "top"}, rgb(${PAGE_BG}), rgba(${PAGE_BG}, 0))`,
+  pointerEvents: "none", // non blocca l'interazione con l'iframe attivo
+});
 
 export default function ExpanseEmbed() {
   // Finche' l'overlay e' visibile la rotella scorre la pagina, non l'iframe.
@@ -50,14 +68,13 @@ export default function ExpanseEmbed() {
       style={{
         position: "relative",
         zIndex: 1,
-        ...contentContainer,
-        paddingBottom: "6rem",
       }}
     >
       <style>{`
         .xp-embed__frame {
           position: relative;
-          width: 100%;
+          left: 0;
+          width: 100dvw;
           aspect-ratio: 16 / 9;
           max-height: 80vh;
           overflow: hidden;
@@ -79,6 +96,9 @@ export default function ExpanseEmbed() {
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
         />
 
+        <div aria-hidden="true" style={fadeStyle("top")} />
+        <div aria-hidden="true" style={fadeStyle("bottom")} />
+
         {!active && (
           // Il click ovunque sull'overlay attiva (mouse); per la tastiera c'e'
           // il pulsante, che e' l'unico elemento focalizzabile qui dentro.
@@ -90,7 +110,7 @@ export default function ExpanseEmbed() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "rgba(6, 0, 24, 0.35)",
+              background: OVERLAY_BG,
               cursor: "pointer",
             }}
           >
@@ -101,7 +121,7 @@ export default function ExpanseEmbed() {
         )}
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem" }}>
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "3rem" }}>
         <DiagonalButton href={EXPANSE_URL} external>
           Apri a schermo intero
         </DiagonalButton>
