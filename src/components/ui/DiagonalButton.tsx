@@ -9,12 +9,16 @@ interface DiagonalButtonProps {
   onClick?: () => void;
   type?: "button" | "submit";
   disabled?: boolean;
+  /** Link esterno: apre in una nuova scheda (con avviso per screen reader). */
+  external?: boolean;
+  /** Riempimento a riposo, per leggere il testo sopra contenuti chiari. */
+  idleFill?: string;
 }
 
 // Shared CTA style: parallelogram (top-left / bottom-right corners cut) with a
 // cyan outline that fills solid on hover. Used across the home CTAs and forms
 // so every "primary action" button on the site reads the same.
-export function DiagonalButton({ href, children, onClick, type = "button", disabled }: DiagonalButtonProps) {
+export function DiagonalButton({ href, children, onClick, type = "button", disabled, external, idleFill }: DiagonalButtonProps) {
   const [hovered, setHovered] = useState(false);
 
   const content = (
@@ -27,7 +31,7 @@ export function DiagonalButton({ href, children, onClick, type = "button", disab
       >
         <polygon
           points="0.07,0 1,0 0.93,1 0,1"
-          fill={hovered ? "#00f5ff" : "transparent"}
+          fill={hovered ? "#00f5ff" : idleFill ?? "transparent"}
           stroke="#00f5ff"
           strokeWidth="1"
           vectorEffect="non-scaling-stroke"
@@ -55,6 +59,22 @@ export function DiagonalButton({ href, children, onClick, type = "button", disab
     background: "none",
     border: "none",
   };
+
+  if (href && external) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={sharedStyle}
+      >
+        {content}
+        <span className="sr-only"> (si apre in una nuova scheda)</span>
+      </a>
+    );
+  }
 
   if (href) {
     return (

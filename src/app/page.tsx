@@ -11,6 +11,7 @@ import SkillsSection from "@/components/home/SkillsSection";
 import ProjectsDivider from "@/components/home/ProjectsDivider";
 import ProjectsGrid from "@/components/home/ProjectsGrid";
 import CosaVedere from "@/components/home/CosaVedere";
+import ExpanseEmbed from "@/components/home/ExpanseEmbed";
 import ScrollHint from "@/components/home/ScrollHint";
 import { client } from "@/sanity/lib/client";
 import { projectsQuery, skillsQuery } from "@/sanity/queries";
@@ -30,9 +31,9 @@ export default async function Home() {
   return (
     <PageLoader startAtTop>
     <SkipLinks links={[
+      { id: "experience", label: "Esperienza" },
       { id: "skills", label: "Skill" },
       { id: "progetti", label: "Progetti" },
-      { id: "experience", label: "Esperienza" },
       { id: "contatti", label: "Contatti" },
     ]} />
     <main style={{ position: "relative" }}>
@@ -84,6 +85,9 @@ export default async function Home() {
 
       {/* 2 — Progettiamo mondi */}
       <ProgettiamoDivider />
+
+      {/* 2b — Esperienza Expanse incorporata (iframe) */}
+      <ExpanseEmbed />
 
       {/* 3 — Skills */}
       <section id="skills" tabIndex={-1} className="skip-target" aria-label="Le nostre skill">
