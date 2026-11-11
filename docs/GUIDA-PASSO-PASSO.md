@@ -137,13 +137,14 @@ Accanto al pulsante "Invia" ora c'è questa frase:
 
 ---
 
-## Passo 9 — Mittente delle email del form 🧑‍💻
+## Passo 9 — Mittente delle email del form
 
-Oggi le email del form arrivano da un indirizzo di prova di Resend (`onboarding@resend.dev`), che rischia di finire nello spam.
+Il sito ora invia le email del form da **form@arcs-design.com**. Finché il dominio `arcs-design.com` non è verificato su Resend, il sito usa da solo l'indirizzo di prova (`onboarding@resend.dev`), che rischia di finire nello spam: il form funziona comunque.
 
-- [ ] Su **resend.com** → **Domains → Add domain**: aggiungi il dominio ARCS.
+- [ ] Su **resend.com** → **Domains → Add domain**: aggiungi `arcs-design.com`.
 - [ ] Resend mostra alcune righe "DNS" da copiare dove è gestito il dominio (il pannello del provider). Se non sai chi gestisce il dominio, chiedi a chi si occupa dell'hosting di arcs-design.com.
-- [ ] Quando Resend mostra **Verified**, chiedi di cambiare il mittente nel codice (es. `form@arcs-design.com`) 🧑‍💻
+- [ ] Aspetta che Resend mostri **Verified** (può volerci da qualche minuto a qualche ora).
+- [ ] Controllo: invia un messaggio di prova dalla pagina Contattaci. L'email deve arrivare a studio@arcs-design.com con mittente **form@arcs-design.com**.
 
 ---
 
@@ -189,6 +190,6 @@ Il sito è commerciale: il piano gratuito di Vercel (Hobby) non lo consente.
 | 6 | Dominio www su Vercel | tu | [ ] |
 | 7 | Turnstile anti-spam | tu | [ ] |
 | 8 | Verifica privacy | tu + consulente | [ ] |
-| 9 | Mittente email Resend | tu + 🧑‍💻 | [ ] |
+| 9 | Verifica dominio su Resend | tu | [ ] |
 | 10 | CSP da prova ad attiva | 🧑‍💻 | [ ] |
 | 11 | Piano Vercel Pro | tu | [ ] |
