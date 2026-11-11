@@ -27,10 +27,10 @@ type Result = { ok: boolean; error?: string };
 
 // Messaggi all'utente: generici, mai dettagli del provider o stack (§12.3).
 // Mittente e destinatario delle email del form. Il mittente richiede il
-// dominio arcs-design.com verificato su Resend (resend.com → Domains).
-const CONTACT_FROM = "Expanse Form <form@arcs-design.com>";
+// dominio arcs-expanse.com verificato su Resend (resend.com → Domains).
+const CONTACT_FROM = "Expanse Form <form@arcs-expanse.com>";
 const CONTACT_FROM_FALLBACK = "Expanse Form <onboarding@resend.dev>";
-const CONTACT_TO = "studio@arcs-design.com";
+const CONTACT_TO = "studio@arcs-expanse.com";
 
 /** Errore Resend "dominio non verificato" (403 con messaggio sul dominio). */
 function isUnverifiedDomain(error: { message: string; statusCode: number | null }): boolean {
