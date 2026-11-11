@@ -71,8 +71,9 @@ export default function ProgettiamoDivider() {
         zIndex: 1,
         // Spazio ridotto (prima minHeight 80vh centrato): il blocco sta piu'
         // vicino all'esperienza Expanse che segue.
-        paddingTop: "8rem",
-        paddingBottom: "3rem",
+        // Lo spazio sopra lo da' gia' il blocco viola (PurpleBand).
+        paddingTop: "3rem",
+        paddingBottom: "6rem",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

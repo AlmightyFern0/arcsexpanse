@@ -12,6 +12,7 @@ import ProjectsDivider from "@/components/home/ProjectsDivider";
 import ProjectsGrid from "@/components/home/ProjectsGrid";
 import CosaVedere from "@/components/home/CosaVedere";
 import ExpanseEmbed from "@/components/home/ExpanseEmbed";
+import PurpleBand from "@/components/home/PurpleBand";
 import ScrollHint from "@/components/home/ScrollHint";
 import { client } from "@/sanity/lib/client";
 import { projectsQuery, skillsQuery } from "@/sanity/queries";
@@ -83,11 +84,12 @@ export default async function Home() {
         <ScrollHint />
       </section>
 
-      {/* 2 — Progettiamo mondi */}
-      <ProgettiamoDivider />
-
-      {/* 2b — Esperienza Expanse incorporata (iframe) */}
-      <ExpanseEmbed />
+      {/* 2 — Progettiamo mondi + esperienza Expanse (iframe), su un unico
+          sfondo viola con le diagonali come le skill */}
+      <PurpleBand>
+        <ProgettiamoDivider />
+        <ExpanseEmbed />
+      </PurpleBand>
 
       {/* 3 — Skills */}
       <section id="skills" tabIndex={-1} className="skip-target" aria-label="Le nostre skill">

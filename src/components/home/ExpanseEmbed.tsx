@@ -8,14 +8,15 @@ import { contentContainer } from "@/lib/layout";
 // Host gia' ammesso in `frame-src` nella CSP di next.config.ts.
 const EXPANSE_URL = "https://storage.net-fs.com/hosting/8574980/4/";
 
-// Colore di fondo della pagina (#060018, vedi globals.css).
-const PAGE_BG = "6, 0, 24";
+// Colore di fondo del blocco viola che contiene la sezione (#4419AE, come
+// SkillsSection; vedi PurpleBand).
+const PAGE_BG = "68, 25, 174";
 
-// Velo sopra l'iframe inattivo: stesso colore della pagina, molto scuro.
+// Velo sopra l'iframe inattivo: stesso colore dello sfondo, molto coprente.
 const OVERLAY_BG = `rgba(${PAGE_BG}, 0.85)`;
 
 // Fondo del pulsante: il contenuto sotto puo' essere chiaro, e il testo ciano
-// a 11px deve restare sopra 4,5:1 (su questo fondo ~11:1).
+// a 11px deve restare sopra 4,5:1 (anche sopra un iframe bianco ~5,7:1).
 const BUTTON_FILL = `rgba(${PAGE_BG}, 0.85)`;
 
 // Sfumature in alto e in basso che fondono i bordi dell'iframe con la pagina.
@@ -78,7 +79,7 @@ export default function ExpanseEmbed() {
           aspect-ratio: 16 / 9;
           max-height: 80vh;
           overflow: hidden;
-          background: #060018;
+          background: #4419AE;
         }
         @media (max-width: 768px) {
           .xp-embed__frame { aspect-ratio: 4 / 5; }
