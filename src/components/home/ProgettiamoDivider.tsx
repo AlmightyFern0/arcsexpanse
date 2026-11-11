@@ -35,7 +35,7 @@ export default function ProgettiamoDivider() {
         scrollTrigger: {
           trigger: section,
           start: "top 70%",
-          toggleActions: "play none none reset",
+          once: true,
         },
       }
     );
@@ -52,7 +52,7 @@ export default function ProgettiamoDivider() {
         scrollTrigger: {
           trigger: section,
           start: "top 70%",
-          toggleActions: "play none none reset",
+          once: true,
         },
       }
     );
@@ -73,7 +73,7 @@ export default function ProgettiamoDivider() {
         // vicino all'esperienza Expanse che segue.
         // Lo spazio sopra lo da' gia' il blocco viola (PurpleBand).
         paddingTop: "3rem",
-        paddingBottom: "6rem",
+        paddingBottom: "16rem",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

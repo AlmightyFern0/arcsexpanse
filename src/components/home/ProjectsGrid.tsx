@@ -386,17 +386,6 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
           .home-card-overlay { opacity: 1 !important; transform: none !important; }
         }
       `}</style>
-      <p className="progetti-label" style={{
-        textAlign: "center",
-        fontSize: "16px",
-        fontWeight: 400,
-        fontFamily: "var(--font-barlow), sans-serif",
-        letterSpacing: "0.3em",
-        color: "#00F5FF",
-        marginBottom: "2.5rem",
-      }}>
-        i nostri progetti
-      </p>
 
       {isMobile ? (
         // Mobile: colonna full-width, niente margini/parallasse/diagonali

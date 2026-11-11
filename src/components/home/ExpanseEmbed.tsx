@@ -13,14 +13,14 @@ const EXPANSE_URL = "https://storage.net-fs.com/hosting/8574980/4/";
 const PAGE_BG = "68, 25, 174";
 
 // Velo sopra l'iframe inattivo: stesso colore dello sfondo, molto coprente.
-const OVERLAY_BG = `rgba(${PAGE_BG}, 0.85)`;
+const OVERLAY_BG = `rgba(${PAGE_BG}, 0.3)`;
 
 // Fondo del pulsante: il contenuto sotto puo' essere chiaro, e il testo ciano
 // a 11px deve restare sopra 4,5:1 (anche sopra un iframe bianco ~5,7:1).
 const BUTTON_FILL = `rgba(${PAGE_BG}, 0.85)`;
 
 // Sfumature in alto e in basso che fondono i bordi dell'iframe con la pagina.
-const FADE_HEIGHT = "12%";
+const FADE_HEIGHT = "30%";
 const fadeStyle = (edge: "top" | "bottom"): React.CSSProperties => ({
   position: "absolute",
   left: 0,
@@ -122,7 +122,7 @@ export default function ExpanseEmbed() {
         )}
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "3rem" }}>
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "6rem" }}>
         <DiagonalButton href={EXPANSE_URL} external>
           Apri a schermo intero
         </DiagonalButton>

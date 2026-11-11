@@ -89,12 +89,12 @@ export default async function Home() {
       <PurpleBand>
         <ProgettiamoDivider />
         <ExpanseEmbed />
+        
+        {/* 3 — Skills */}
+        <section id="skills" tabIndex={-1} className="skip-target" aria-label="Le nostre skill">
+          <SkillsSection skills={skills} />
+        </section>
       </PurpleBand>
-
-      {/* 3 — Skills */}
-      <section id="skills" tabIndex={-1} className="skip-target" aria-label="Le nostre skill">
-        <SkillsSection skills={skills} />
-      </section>
 
       {/* 4 — Divider progetti */}
       <ProjectsDivider />

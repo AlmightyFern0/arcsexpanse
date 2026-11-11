@@ -292,18 +292,15 @@ export default function SkillsSection({ skills }: SkillsSectionProps) {
     <section
       className="relative z-10"
       style={{
-        background: "#4419AE",
         minHeight: "1217px",
-        clipPath: "polygon(0 8.75vw, 100% 0, 100% calc(100% - 8.75vw), 0 100%)",
         paddingTop: "calc(8.75vw + 5rem)",
-        paddingBottom: "calc(8.75vw + 5rem)",
       }}
     >
       <p
         className="skill-label"
         style={{
           textAlign: "center",
-          fontSize: "16px",
+          fontSize: "3rem",
           fontWeight: 400,
           fontFamily: "var(--font-barlow), sans-serif",
           letterSpacing: "0.3em",
