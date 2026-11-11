@@ -8,6 +8,7 @@ import { PRIVACY_POLICY_URL } from "@/lib/site";
 import { sendContactEmail } from "./actions";
 import { LIMITS, OTHER_CATEGORY, REQUIRED_MESSAGES, TAGS } from "./formOptions";
 import TurnstileWidget, { TURNSTILE_ENABLED } from "./TurnstileWidget";
+import { scrollPageTo } from "@/lib/smoothScroll";
 
 interface Skill {
   _id: string;
@@ -120,7 +121,7 @@ export default function ContactForm({ skills }: { skills: Skill[] }) {
       });
       if (res.ok) {
         setSubmitted(true);
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollPageTo(0);
       } else {
         setError(res.error ?? "Invio non riuscito, riprova tra poco.");
         // Un token Turnstile vale una volta sola: dopo un errore ne serve uno nuovo.

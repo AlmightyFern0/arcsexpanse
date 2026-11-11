@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Barlow } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import NavigationSplash from "@/components/layout/NavigationSplash";
+import SmoothScroll from "@/components/layout/SmoothScroll";
 import { SPLINE_VIEWER_SRC } from "@/lib/splineViewerSrc";
 import { SPLINE_ENABLED } from "@/lib/featureFlags";
 import { SITE_URL } from "@/lib/site";
@@ -71,6 +72,7 @@ export default function RootLayout({
       <body style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }} suppressHydrationWarning>
         {children}
         <NavigationSplash />
+        <SmoothScroll />
         <Analytics />
       </body>
     </html>

@@ -6,6 +6,7 @@ import { EMAIL_ARTWORK, FORM_ARTWORK } from "@/components/footer/footerArtworkDa
 import { useCenteredSlot } from "@/hooks/useCenteredSlot";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { ARCS_SITE_URL, COOKIE_POLICY_URL, PRIVACY_POLICY_URL } from "@/lib/site";
+import { scrollPageTo } from "@/lib/smoothScroll";
 
 
 const contacts = [
@@ -87,7 +88,7 @@ export default function Footer() {
   // cosi' il footer sale e il focus non resta invisibile.
   const revealOnFocus = () => {
     if (revealed) return;
-    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
+    scrollPageTo(document.documentElement.scrollHeight, { smooth: false });
   };
 
   useEffect(() => {

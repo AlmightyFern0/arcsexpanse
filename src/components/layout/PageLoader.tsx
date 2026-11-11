@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Splash from "./Splash";
 import { subscribePageReadyStatus, getPageReadyStatus } from "@/lib/pageReady";
+import { setScrollLock } from "@/lib/smoothScroll";
 
 // Tetto di attesa, come rete di sicurezza contro una scena che non carica mai.
 //
@@ -115,7 +116,10 @@ export default function PageLoader({
     };
     root.style.overflow = "hidden";
     root.style.scrollbarGutter = "stable";
+    // Con lo scorrimento fluido la rotella la gestisce Lenis: va fermato.
+    setScrollLock("splash", true);
     return () => {
+      setScrollLock("splash", false);
       root.style.overflow = previous.overflow;
       root.style.scrollbarGutter = previous.scrollbarGutter;
     };

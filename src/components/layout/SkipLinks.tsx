@@ -5,9 +5,14 @@
 //
 // Le sezioni di destinazione hanno `tabIndex={-1}` (ricevono il focus da un
 // link ma non diventano una tappa del Tab) e la classe `skip-target` (vedi
-// globals.css: margine per la barra fissa, nessun anello sulla sezione).
+// globals.css: nessun anello sulla sezione).
+//
+// In coda c'e' "Disattiva scorrimento fluido": chi naviga da tastiera lo trova
+// subito, prima di qualsiasi contenuto.
 //
 // Va messo PRIMA di <main> e della navbar, cosi' e' il primo Tab.
+
+import SmoothScrollToggle from "./SmoothScrollToggle";
 
 export interface SkipLink {
   /** id della sezione, senza "#". */
@@ -16,17 +21,21 @@ export interface SkipLink {
 }
 
 export default function SkipLinks({ links }: { links: SkipLink[] }) {
-  if (links.length === 0) return null;
   return (
-    <nav aria-label="Vai alla sezione" className="skip-links">
-      <span className="skip-links__title" aria-hidden="true">Vai a:</span>
-      <ul>
-        {links.map((l) => (
-          <li key={l.id}>
-            <a href={`#${l.id}`}>{l.label}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div className="skip-links">
+      {links.length > 0 && (
+        <nav aria-label="Vai alla sezione">
+          <span className="skip-links__title" aria-hidden="true">Vai a:</span>
+          <ul>
+            {links.map((l) => (
+              <li key={l.id}>
+                <a href={`#${l.id}`}>{l.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+      <SmoothScrollToggle className="skip-links__toggle" />
+    </div>
   );
 }
